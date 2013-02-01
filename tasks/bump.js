@@ -13,13 +13,13 @@
 module.exports = function(grunt) {
   grunt.registerTask('bump', 'Increment the version number.', function(versionType) {
     var PACKAGE_FILE = 'package.json';
-    var package = grunt.file.readJSON(PACKAGE_FILE);
+    var _package = grunt.file.readJSON(PACKAGE_FILE);
     var file = grunt.file.read( PACKAGE_FILE );
 
     // compute the new version
-    var version = grunt.helper('bump_version', package.version, versionType || 'patch');
+    var version = bump(_package.version, versionType || 'patch');
 
-    var file = file.replace( /([\'|\"]version[\'|\"]:[ ]*[\'|\"])([\d|.]*)([\'|\"])/i, function( match, left, center, right ) {
+    file = file.replace( /([\'|\"]version[\'|\"]:[ ]*[\'|\"])([\d|.]*)([\'|\"])/i, function( match, left, center, right ) {
       return left + version + right;
     } );
 
@@ -29,7 +29,7 @@ module.exports = function(grunt) {
   });
 
 
-  grunt.registerHelper('bump_version', function(version, versionType) {
+  function bump (version, versionType) {
     var type = {
       patch: 2,
       minor: 1,
@@ -44,5 +44,5 @@ module.exports = function(grunt) {
       parts[idx] = 0;
     }
     return parts.join('.');
-  });
+  }
 };
